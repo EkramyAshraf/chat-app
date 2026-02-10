@@ -8,7 +8,10 @@ const cors = require("cors");
 
 dotenv.config({ path: "./config.env" });
 const authRoutes = require("./routes/authRoutes");
+const conversationRoutes = require("./routes/conversationRoutes");
 const app = express();
+// Body parser, reading data from body into req.body
+app.use(express.json({ limit: "20kb" }));
 const server = http.createServer(app);
 const io = socketio(server, {
   cors: {
@@ -40,6 +43,8 @@ io.on("connection", (socket) => {
 
 //mount routes
 app.use("/api/auth", authRoutes);
+app.use("/api/conversations", conversationRoutes);
+
 const port = process.env.PORT || 3000;
 server.listen(port, () => {
   console.log(`server is running on port ${port}`);
